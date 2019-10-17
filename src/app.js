@@ -11,18 +11,29 @@ function App() {
 
    // FORM RESPONSE
    const response = (value) => {
-      axios.get('https://jsonplaceholder.typicode.com/posts').then(result => {
+      axios.get('https://rata.digitraffic.fi/api/v1/live-trains/station/HKI/' + value).then(result => {
          
-         // ON SUCCESS
-         dispatch({
-            data: result.data,
-            status: result.status,
-            input: value
-         })
+         // TPE = TAMPERE
+         // KR = KARJAA
+         // EPO = ESPOO
 
+         // IF NO DATA WAS FOUND
+         if (result.data.errorMessage !== undefined) {
+            dispatch({
+               status: 204,
+               reason: result.data.errorMessage
+            })
+
+         // OTHERWISE, PROCEED NORMALLY
+         } else {
+            dispatch({
+               data: result.data,
+               status: result.status
+            })
+         }
+
+      // ON ERROR
       }).catch(error => {
-
-         // ON ERROR
          dispatch({
             status: 404,
             reason: error
@@ -33,8 +44,9 @@ function App() {
    return (
       <div id={ 'wrapper' }>
          <div>
+            <div id={ 'header' }>Trains from Helsinki</div>
             <Form
-               placeholder={ 'Search for something..' }
+               placeholder={ 'Where would you like to go?' }
                response={ response }
             />
             <Content query={ state } />

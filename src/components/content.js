@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Content({ query }) {
-    switch(query.status) {
+    switch (query.status) {
 
         // EVERYTHING OK
         case 200: { return (
@@ -9,44 +9,48 @@ function Content({ query }) {
                 <div>
                     { query.data.map((item, index) =>
                         <div className={ 'row' } key={ index }>
-                            { (index + 1) + '. ' + shorten(item.title) }
+                            <Row data={ item } />
                         </div>
                     )}
                 </div>
             </div>
         )}
 
-        // EVERYTHING OK
-        case 404: { return (
+        // QUERY OK, NO RESULTING DATA
+        case 204: { return (
             <div id={ 'content' }>
                 <div>
-                    <div className={ 'row' }>{ query.reason }</div>
+                    <div id={ 'error' }>No results found!</div>
                 </div>
             </div>
         )}
 
-        // FALLBACK
-        default: { return (
-            <div id={ 'content' } />
+        // API BLOCKED OR DOWN
+        case 404: { return (
+            <div id={ 'content' }>
+                <div>
+                    <div id={ 'error' }>The API is not responding!</div>
+                </div>
+            </div>
         )}
+
+        // FALLBACK, RETURN EMPTY SELECTOR
+        default: { return <div id={ 'content' } /> }
     }
 }
 
-// SHORTEN STRING
-function shorten(string) {
+function Row({ data }) {
 
-    // MAX CHARACTER LIMIT
-   const max_length = 35;
+    // GENERATE HEADER & DEPARTURE TIME
+    const header = data.trainType + '-' + data.trainNumber;
+    const departure = data.timeTableRows['0'].scheduledTime.split('T')[1].slice(0, 5)
 
-   // CHECK IF THE STRING LONGER THAN 22 CHARACTERS
-   if (string.length > max_length) {
-
-      // ALLOW THE FIRST 20 CHARACTERS AND TAG ON THE TRIPLEDOT
-      string = string.substring(0, (max_length - 3));
-      string += '...';
-   }
-
-   return string;
-}
+    return (
+        <div className={ 'split' }>
+            <div>{ header }</div>
+            <div>{ departure }</div>
+        </div>
+    )
+} 
 
 export default Content;
