@@ -32,6 +32,14 @@ body {
    }
 }
 
+#header {
+   font-size: 18px;
+   color: white;
+   text-align: center;
+   margin-bottom: 15px;
+   text-shadow: 1px 1px #242424;
+}
+
 #form {
    background: rgba(0, 0, 0, 0.247);
    display: flex;
@@ -88,11 +96,32 @@ body {
       background: rgba(0, 0, 0, 0.247);
       padding: 2px;
 
-      .row {
+      .row, #error {
          background: rgba(107, 193, 204, 0.39);
          margin-bottom: 2px;
          padding: 6px 8px;
          color: rgba(255, 255, 255, 0.815);
+
+         .split {
+            display: table;
+            width: 100%;
+         
+            div {
+               display: table-cell;
+               width: auto;
+               text-align: left;
+               vertical-align: top;
+            }
+         
+            div:nth-child(2) {
+               text-align: right;
+            }
+         }
+      }
+
+      #error {
+         background: rgba(214, 98, 98, 0.425);
+         margin-bottom: 0px;
       }
 
       .row:last-child {
